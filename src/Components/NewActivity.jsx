@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
     FormControl,
     FormLabel,
@@ -19,23 +19,41 @@ import {
     DialogTitle,
     Input,
     InputLabel,
+    Card,
+    Typography, 
+    CardContent
 } from '@mui/material';
 import { Box } from "@mui/material";
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import FormContext from "../Contexts/formContext";
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
+import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import NaturePeopleRoundedIcon from '@mui/icons-material/NaturePeopleRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+import ActivityFull from "./ActivityFull";
 
 
 const MaterialFormComponent = (props) => {
-
-    const [formData, setData] = useState({});
-    const {
-        activityName,
-        hours,
-        minutes,
-        location,
-        type,
-        participants,
-        scheduled,
-        cost,
-        gain } = formData
+    const [formData, setData] = useState();
+    const { activities, setActivities } = useContext(FormContext);
+// let arr = []
+    // const [formData, setData] = useState({});
+    // const {
+    //     activityName,
+    //     hours,
+    //     minutes,
+    //     location,
+    //     type,
+    //     participants,
+    //     scheduled,
+    //     cost,
+    //     gain } = formData
 
     const dummyActivity = {
         activityName: "Sprint Planning",
@@ -52,11 +70,14 @@ const MaterialFormComponent = (props) => {
     }
 
 
-
+    // const { formData, setData } = useContext(FormContext);
+// const sendData = () => {
+//     arr.push(formData)
+// }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        setActivities([...activities, formData])
         console.log({ formData });
     };
     const [open, setOpen] = useState(false);
@@ -68,6 +89,10 @@ const MaterialFormComponent = (props) => {
     const handleClose = () => {
         setOpen(false);
     };
+    const drawerWidth = 240;
+    const net = 4;
+
+    if(!activities) return null
 
     return (
         <>
@@ -86,7 +111,6 @@ const MaterialFormComponent = (props) => {
                                         name="activityName"
                                         label="Activity"
                                         type="text"
-                                        value={activityName}
                                         onChange={({ target }) => setData({ ...formData, activityName: target.value })}
                                     />
                                 </FormGroup>
@@ -97,7 +121,6 @@ const MaterialFormComponent = (props) => {
                                         <FormLabel>Location</FormLabel>
                                         <RadioGroup
                                             name="location"
-                                            value={location}
                                             onChange={({ target }) => setData({ ...formData, location: target.value })}
                                             row
                                         >
@@ -124,7 +147,7 @@ const MaterialFormComponent = (props) => {
                                         <FormLabel>Participants</FormLabel>
                                         <RadioGroup
                                             name="participants"
-                                            value={participants}
+                                            // value={formData.participants}
                                             onChange={({ target }) => setData({ ...formData, participants: target.value })}
                                             row
                                         >
@@ -155,15 +178,15 @@ const MaterialFormComponent = (props) => {
                                 <FormControl style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
                                     <FormGroup>
+                                        <Input type="number" style={{ width: '75px' }} min={0} max={24} placeholder='hours' onChange={({ target }) => setData({ ...formData, hours: target.value })}></Input>
+
+                                    </FormGroup>
+                                    <FormGroup>
 
                                         <Input type="number" style={{ width: '75px' }} min={1} max={60} placeholder='minutes' onChange={({ target }) => setData({ ...formData, minutes: target.value })}></Input>
 
                                     </FormGroup>
 
-                                    <FormGroup>
-                                        <Input type="number" style={{ width: '75px' }} min={0} max={24} placeholder='hours' onChange={({ target }) => setData({ ...formData, hours: target.value })}></Input>
-
-                                    </FormGroup>
 
                                     {/* <InputLabel>Hours</InputLabel> */}
                                 </FormControl>
@@ -171,31 +194,31 @@ const MaterialFormComponent = (props) => {
 
                             <Box item >
 
+                                <FormLabel>Activity Type</FormLabel>
                                 <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                                    <FormLabel>Activity Type</FormLabel>
-                                    {/* <FormControlLabel control={<Checkbox name="work" />} label="Work" onChange={e => {handleChange(e); onChangeAttribute}} /> */}
-                                    {/* <FormControlLabel control={<Checkbox name="personal" />} label="Personal" onChange={e => {handleChange(e);onChangeAttribute}} /> */}
+                                    <FormControl style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
-                                    <RadioGroup
-                                        name="type"
-                                        value={type}
-                                        onChange={({ target }) => setData({ ...formData, type: target.value })}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            key="work"
-                                            value="work"
-                                            control={<Radio size="small" />}
-                                            label="work"
-                                        />
-                                        <FormControlLabel
-                                            key="personal"
-                                            value="personal"
-                                            control={<Radio size="small" />}
-                                            label="personal"
-                                        />
+                                        <RadioGroup
+                                            name="type"
+                                            // value={type}
+                                            onChange={({ target }) => setData({ ...formData, type: target.value })}
+                                            row
+                                        >
+                                            <FormControlLabel
+                                                key="work"
+                                                value="work"
+                                                control={<Radio size="small" />}
+                                                label="Work"
+                                            />
+                                            <FormControlLabel
+                                                key="personal"
+                                                value="personal"
+                                                control={<Radio size="small" />}
+                                                label="Personal"
+                                            />
 
-                                    </RadioGroup>
+                                        </RadioGroup>
+                                    </FormControl>
 
                                 </FormGroup>
                             </Box>
@@ -236,19 +259,19 @@ const MaterialFormComponent = (props) => {
                             <Box>
                                 <TextField
                                     id="date"
-                                    label="Birthday"
+                                    label="Date"
                                     type="date"
                                     defaultValue={new Date()}
                                     sx={{ width: 220 }}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                    onChange={({ target }) => setData({ ...formData, scheduled: target.value }) }
+                                    onChange={({ target }) => setData({ ...formData, scheduled: target.value })}
                                 />
                             </Box>
 
                             <Box item>
-                                <Button variant="contained" color="primary" type="submit" style={{
+                                <Button variant="contained" color="primary" type="submit" onClick={handleClose} style={{
                                     backgroundColor: "red",
                                     margin: "5px"
                                 }}>

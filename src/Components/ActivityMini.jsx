@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Box } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -12,6 +12,7 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+import FormContext from '../Contexts/formContext';
 
 
 const dummyActivity = {
@@ -30,8 +31,9 @@ const dummyActivity = {
 
 function ActivityMini({ act }) {
   const net = act.gain - act.cost
+  const { colorsGain, colorsCost } = useContext(FormContext)
   return (
-    <Card variant="outlined" sx={{backgroundColor: net < 0 ? '#e82b7a' : net > 0 ? '#6b88f9' : '#8d6fd7', width:'15rem', padding:'0.5em 0.75em', display:'flex', columnGap:'1em'}}>
+    <Card variant="outlined" sx={{backgroundColor: net < 0 ? colorsCost[net*-1] : colorsGain[net], width:'15rem', width:'15rem', padding:'0.5em 0.75em', display:'flex', columnGap:'1em'}}>
         <Typography sx={{ gridColumn: 'span 3' }}>{act.activityName}</Typography>
         <Box sx={{display:'flex', columnGap:'0.5em', alignItems:'center'}}>
           { act.type == 'work' && <BadgeRoundedIcon fontSize={'10'}/>}

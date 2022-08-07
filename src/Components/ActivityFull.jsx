@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import { Box } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -12,26 +12,33 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+import FormContext from '../Contexts/formContext';
+// import dummyData from '../dummyData'
 
 
-const dummyActivity = {
-        activityName: "Sprint Planning",
-  duration: {
-    hours: 2,
-    minutes: 15
-        },
-        location: "indoors",
-        type: "work",
-        participants: "1-2",
-        scheduled: "backlog",
-        cost: 1,
-        gain: 1
-    }
+
+// const dummyActivity = {
+//         activityName: "Sprint Planning",
+//   duration: {
+//     hours: 2,
+//     minutes: 15
+//         },
+//         location: "indoors",
+//         type: "work",
+//         participants: "1-2",
+//         scheduled: "backlog",
+//         cost: 1,
+//         gain: 1
+//     }
 
 function ActivityFull({ act }) {
   const net = act.gain - act.cost
+  const { colorsGain, colorsCost } = useContext(FormContext)
+
+  console.log(act)
+
   return (
-    <Card variant="outlined" sx={{backgroundColor: net < 0 ? '#e82b7a' : net > 0 ? '#6b88f9' : '#8d6fd7', width:'15rem'}}>
+    <Card variant="outlined" sx={{backgroundColor: net < 0 ? colorsCost[net*-1] : colorsGain[net], width:'18rem'}}>
       <CardContent sx={{display:'grid', gridTemplateColumns: '1fr 1fr', alignContent:'center', alignItems:'center'}}>
         <Typography sx={{gridColumn:'span 2'}}>{act.activityName}</Typography>
           { act.type == 'work' && <Box> 
@@ -44,17 +51,17 @@ function ActivityFull({ act }) {
           </Box>}
           <Box>
           <AccessTimeRoundedIcon/>
-          <Typography>{`${act.duration.hours && `${act.duration.hours}h`}${act.duration.minutes && ` ${act.duration.minutes}m`}`}</Typography>
+          <Typography>{`${act.duration?.hours && `${act.duration.hours}h`}${act.duration?.minutes && ` ${act.duration.minutes}m`}`}</Typography>
         </Box>
-          { act.location == 'indoor' && <Box> 
+          { act.location == 'indoors' && <Box> 
           <HomeRoundedIcon/>
           <Typography>indoor</Typography>
         </Box>}
-          { act.location == 'outdoor' && <Box> 
+          { act.location == 'outdoors' && <Box> 
           <NaturePeopleRoundedIcon/>
           <Typography>outdoor</Typography>
         </Box>}
-          { act.participants == 'solo' && <Box> 
+          { act.participants == 'Solo' || act.participants == 'solo' && <Box> 
           <PersonRoundedIcon/>
           <Typography>solo</Typography>
         </Box>}
