@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import moment from 'moment'
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -9,11 +9,13 @@ import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import ActivityFull from './ActivityFull';
 import ActivityMini from './ActivityMini';
-
+import FormContext from '../Contexts/formContext';
+import AdjustActivities from './AdjustActivities'
 
 function WeekView() {
 const [week, setWeek] = useState(0)
 const [dates, setDates] = useState()
+const {activities} = useContext(FormContext)  
 
  function formatDate(date) {
     return moment(date).format('dddd DD MMMM YYYY');
@@ -57,7 +59,7 @@ const getWeek = (week) => {
       .format('dddd DD MMMM YYYY')}`;
   }
 
-  if (!dates) return null;
+  if (!dates || !activities) return null;
   
 const dummyActivity = {
         activityName: "Sprint Planning",
@@ -72,7 +74,6 @@ const dummyActivity = {
         cost: 7,
         gain: 1
     } 
-
 
 
 
@@ -97,8 +98,9 @@ const dummyActivity = {
       {formatDate(day)}
       </Typography>
       <Box sx={ index == 0 ? {display:'flex', flexWrap:'wrap',rowGap: '1rem', columnGap: '1rem'} : {display:'flex', flexDirection:'column', rowGap: '1rem', columnGap: '1rem' }}>
-        { index == 0 &&  <ActivityFull act={dummyActivity}></ActivityFull> }
-        { index != 0 &&  <ActivityMini act={dummyActivity}></ActivityMini> }
+        { index == 0 &&  <AdjustActivities acts={activities}></AdjustActivities>}
+        { index == 0 && activities.map((activity, index) => <ActivityFull act={activity}></ActivityFull>) }
+        { index != 0 &&  activities.map((activity, index) => <ActivityMini act={activity}></ActivityMini>) }
       </Box>
   </CardContent>
   </Card>
